@@ -1,0 +1,9 @@
+---
+- name: configure SSH
+  hosts: windows
+  gather_facts: true
+  vars_files: 
+     - ./ssh_var.yml 
+
+  roles: 
+   - win_service_config

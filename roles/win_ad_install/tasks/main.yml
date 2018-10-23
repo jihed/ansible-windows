@@ -1,0 +1,26 @@
+---
+# tasks file for win_ad_install
+- name: Install AD-Domain-Services feature.
+  win_feature:
+    name:
+    - AD-Domain-Services
+    state: present
+    include_sub_features: yes
+    include_management_tools: yes 
+
+- name: Create the domain in a new forest residing on the target host
+  win_domain:
+   dns_domain_name: "{{ ad_domain_name }}"
+   safe_mode_password:  "{{ ad_safe_mode_password }}"
+  #register: ad_setup
+
+- name: Reboot machine
+  win_reboot:
+  #when: ad_setup.reboot_required
+
+- name: DCs in domain
+  win_shell: "nltest /dclist:{{ ad_domain_name }}"
+  register: domain_list
+
+- debug:
+   var: domain_list
