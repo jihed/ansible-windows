@@ -1,0 +1,41 @@
+[GenericExample:vars]
+
+###########################################################################
+### Ansible Vars
+###########################################################################
+timeout=60
+ansible_become=yes
+ansible_ssh_user=ec2-user
+
+
+[GenericExample:children]
+towers
+windows
+support
+
+[towers]
+## These are the towers
+tower1.ad9c.internal public_host_name=tower1.ad9c.example.opentlc.com ssh_host=tower3.ad9c.internal
+tower2.ad9c.internal public_host_name=tower2.ad9c.example.opentlc.com ssh_host=tower1.ad9c.internal
+tower3.ad9c.internal public_host_name=tower3.ad9c.example.opentlc.com ssh_host=tower2.ad9c.internal
+
+
+[windows]
+## These are the activedirectory servers
+ad1.ad9c.internal ssh_host=ad1.ad9c.example.opentlc.com ansible_password=
+
+
+## These are the supporthosts
+[support]
+support1.ad9c.internal ssh_host=support1.ad9c.internal
+support2.ad9c.internal ssh_host=support2.ad9c.internal
+
+[windows:vars]
+ansible_connection=winrm
+ansible_port=5986
+ansible_ssh_port=5986
+ansible_user=Administrator
+ansible_ssh_user=Administrator
+ansible_winrm_server_cert_validation=ignore
+ansible_winrm_transport=basic
+ansible_become=false
